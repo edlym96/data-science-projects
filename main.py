@@ -100,7 +100,6 @@ def get_table(ticker: str):
 
 df = get_table('MCD')
 
-
 # df = df[['sentiment',  'news_volume', 'excess_volatility']]
 # df = (df - df.mean()) / (df.max() - df.min())
 # df.plot()
@@ -110,8 +109,8 @@ df = get_table('MCD')
 train, test = df[:math.floor(0.8*len(df))], df[math.floor(0.8*len(df)):]
 x_train, x_test, y_train, y_test = model.create_dataset(train, test)
 
-print(x_train, y_train, y_test)
-print(np.shape(x_train))
+# print(x_train, y_train, y_test)
+# print(np.shape(x_train))
 weights, bias = model.create_model(x_train, y_train, x_test, y_test)
 
 print(weights, bias)
