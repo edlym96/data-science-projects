@@ -53,6 +53,7 @@ def create_model(x_train, y_train, x_test, y_test):
     train_acc = []
     test_acc = []
     iteration_array = []
+    loss_array=[]
 
     init = tf.global_variables_initializer()
     config = tf.ConfigProto()
@@ -65,6 +66,7 @@ def create_model(x_train, y_train, x_test, y_test):
             _, loss_value = sess.run([optimizer, loss], feed_dict={train_dataset: x_train, train_labels: y_train})
             total_loss += loss_value
             mean_loss = total_loss / iteration
+            loss_array.append(mean_loss)
             iteration_array.append(iteration)
             iteration += 1
             temp_train_acc = sess.run(accuracy, feed_dict={train_dataset: x_train, train_labels: y_train})
@@ -75,6 +77,11 @@ def create_model(x_train, y_train, x_test, y_test):
             print(temp_train_acc, temp_test_acc)
             print(weights.eval(), bias.eval())
         plt.plot(iteration_array, train_acc, 'b', iteration_array, test_acc, 'r')
+        plt.xlabel("No. of iterations")
+        plt.ylabel("accuracy")
+        plt.show()
+        plt.clf()
+        plt.plot(iteration_array, loss_array)
         plt.show()
         return weights.eval(), bias.eval()
     # model.add(Dense(1,  # output dim is 2, one score per each class
