@@ -91,9 +91,9 @@ def get_table(ticker: str):
     # df['sentiment'] = np.where(df['sentiment'] > 0, 1.0, df['sentiment'])
     # df['sentiment'] = np.where(df['sentiment'] < 0, -1.0, df['sentiment'])
     df['daily_return'] = df['close'].pct_change()
-    # df['volatility'] = 2 * df['daily_return'].rolling(50).std()
-    # df['excess_volatility'] = np.where(df['daily_return'] > df['volatility'], 1.0, 0.0)
-    # df['excess_volatility'] = np.where(-df['daily_return'] > df['volatility'], -1.0, df['excess_volatility'])
+    df['volatility'] = 2 * df['daily_return'].rolling(50).std()
+    df['excess_volatility'] = np.where(df['daily_return'] > df['volatility'], 1.0, 0.0)
+    df['excess_volatility'] = np.where(-df['daily_return'] > df['volatility'], -1.0, df['excess_volatility'])
     df.daily_return.shift(-1)
     df = df.dropna()
     return df
@@ -112,7 +112,9 @@ x_train, x_test, y_train, y_test = model.create_dataset(train, test)
 
 print(x_train, y_train, y_test)
 print(np.shape(x_train))
-model = model.create_model(x_train, y_train, x_test, y_test)
+weights, bias = model.create_model(x_train, y_train, x_test, y_test)
+
+print(weights, bias)
 
 # df.plot()
 
