@@ -34,5 +34,4 @@
 34. **`vh_type`**: This can be either `Tourism` or `Commercial`. You’ll  find  more `Commercial` types for `Professional` policy usage than for `WorkPrivate`.
 35. **`vh_value`**: The vehicle’s value (replacement value) is expressed in euros, without inflation.
 36. **`vh_weight`**: This is the weight (in kg) of the vehicle.
-37. **`claim_amount`**: This is essentially what you must predict. These are individual claim amounts range from (approx.) -2,000 to +300,000. Yes,there are negative values, they come from claims where our driver’s liability is not engaged, so there’s a legal recourse
-*
+37. **`claim_amount`**: This is essentially what you must predict. These are individual claim amounts range from (approx.) -2,000 to +300,000. Yes,there are negative values, they come from claims where our driver’s liability is not engaged, so there’s a legal recourse.
