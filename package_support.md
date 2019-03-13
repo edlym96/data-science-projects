@@ -6,6 +6,5 @@ All native python3.5+ libraries are supported. Aditionally the following librari
 - keras 
 - pandas 
 - theano 
-- statsmodels
 - scipy
 - tensorflow
