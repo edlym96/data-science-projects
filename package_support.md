@@ -1,4 +1,4 @@
-All native python libraries are supported. Aditionally the following libraries are supported. 
+All native python3.5+ libraries are supported. Aditionally the following libraries are supported. 
 
 - matplotlib
 - numpy 
