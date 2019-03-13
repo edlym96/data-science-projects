@@ -11,6 +11,11 @@ from sklearn.model_selection import KFold
 import pickle
 import sys
 
+# this imports the main class from your model
+from model import PricingModel
+
+
+
 # some configuration utilities
 import logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
@@ -34,9 +39,9 @@ def test_profitable_on_market(model, X, y, dataname='training data'):
         return False
     claims = y.sum()
     profit = gains - claims
-    logging.info('Your profit on %s is %.3f.' % (dataname, profit))
+    logging.info('Profit on %s is %.3f.' % (dataname, profit))
     if profit < 0:
-        logging.error('Your model is not profitable on %s :-(' % dataname)
+        logging.error('NOT PROFITABLE on %s :-(' % dataname)
         return False
     return True
 
@@ -51,7 +56,7 @@ def test_profitable_on_random_subset(model, X, y, n_splits=10):
         ysub = y[index]
         # apply the test
         success = test_profitable_on_market(
-            model, Xsub, ysub, 'fold %d of the training data' % (i+1))
+            model, Xsub, ysub, 'fold %d of data' % (i+1))
         success_count += success
     logging.info('Your model was profitable on %d/%d folds of the training data.' %
                  (success_count, n_splits))
@@ -60,7 +65,7 @@ def test_profitable_on_random_subset(model, X, y, n_splits=10):
 
 # actually apply the tests
 # important parameters
-claims_column = 'claims'
+claims_column = 'claim_amount'
 model_filename = 'model.pickle'
 
 

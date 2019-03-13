@@ -81,7 +81,7 @@ if __name__ == '__main__':
 
 	# parameters of the training process
 	output_filename = 'model.pickle' # pickled model filename
-	claims_column   = 'claims'       # column of the claims in the CSV
+	claims_column   = 'claim_amount' # column of the claims in the CSV
 
 
 	# get the command-line arguments 
