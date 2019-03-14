@@ -28,7 +28,7 @@ def test_profitable_on_market(model, X, y, dataname='training data'):
     '''This test computes the profit that the model gets on the full market,
        in a monopolistic situation (gets all the contracts).'''
     prices = model.predict_price(X)
-    if (prices <= 0).any():
+    if (prices < 0).any():
         logging.error('Some of your prices are negative or zero.')
         return False
     try:
