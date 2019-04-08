@@ -8,6 +8,8 @@
 
 import pandas as pd
 from sklearn.model_selection import KFold
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import train_test_split
 import pickle
 import sys
 
@@ -23,13 +25,13 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
 
 # definition of the tests
 
-
-def test_profitable_on_market(model, X, y, dataname='training data'):
+def test_profitable_on_market(model, X, y, dataname='training data', require_10percent=True):
     '''This test computes the profit that the model gets on the full market,
-       in a monopolistic situation (gets all the contracts).'''
+       in a monopolistic situation (gets all the contracts).
+       It requires the model to have a profit of at least 10% sum(claims)'''
     prices = model.predict_price(X)
     if (prices < 0).any():
-        logging.error('Some of your prices are negative or zero.')
+        logging.error('Some of your prices are negative.')
         return False
     try:
         gains = prices.sum()
@@ -39,10 +41,19 @@ def test_profitable_on_market(model, X, y, dataname='training data'):
         return False
     claims = y.sum()
     profit = gains - claims
-    logging.info('Profit on %s is %.3f.' % (dataname, profit))
-    if profit < 0:
-        logging.error('NOT PROFITABLE on %s :-(' % dataname)
-        return False
+    logging.info('Your profit on %s is %.3f.' % (dataname, profit))
+    if require_10percent:
+        if profit < 0.1*claims:
+            logging.error('Your model is not at least 10%% profitable on %s :-(' % dataname)
+            ratio = (1.100001*claims/gains)
+            logging.error('Hint: multiply your prices by %.6f ;-)' % ratio) # (1.1*claims/prices) * prices - claims = 0.1 claims
+            return False
+        else:
+            logging.info('Your model is 10% profitable on training data: well done!')
+    else:
+        if profit < 0:
+            logging.error('Your model is not profitable on %s :-(' % dataname)
+            return False
     return True
 
 
@@ -56,7 +67,7 @@ def test_profitable_on_random_subset(model, X, y, n_splits=10):
         ysub = y[index]
         # apply the test
         success = test_profitable_on_market(
-            model, Xsub, ysub, 'fold %d of data' % (i+1))
+            model, Xsub, ysub, 'fold %d of the training data' % (i+1), require_10percent=False)
         success_count += success
     logging.info('Your model was profitable on %d/%d folds of the training data.' %
                  (success_count, n_splits))
@@ -98,13 +109,14 @@ except Exception as err:
 logging.info('Your model loaded successfully.')
 
 
+
 # run the tests on the model
 logging.info('Starting the tests for your model ("%s")' % model_filename)
 
 
 try:
     test1 = test_profitable_on_market(model, X, y)
-    logging.info('Is your model profitable on training data:{0}'.format(bool(test1)))
+    print()
     test2 = test_profitable_on_random_subset(model, X, y)
 except Exception as err:
     logging.critical('There was an error when using your model: "%s".' % err)
