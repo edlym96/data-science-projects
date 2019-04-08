@@ -111,7 +111,7 @@ class PricingModel:
 		# YOUR CODE HERE
 
 		# In our example, we just apply the logistic classifier.
-		return self.clf.predict(X_clean)
+		return self.clf.predict_proba(X_clean)
 
 
 	def predict_claim_amount(self, X_clean):
