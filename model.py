@@ -64,6 +64,7 @@ class PricingModel:
 		# WARNING: this is very basic and SHOULD be changed!
 		good_cols = ['drv_age1', 'drv_age_lic1', 'vh_age', 'vh_value', 'vh_speed']
 		X_clean = X[good_cols]
+		X_clean.fillna(0, inplace=True)
 		return X_clean
 
 
@@ -95,7 +96,7 @@ class PricingModel:
 		x_reg = X_clean[nnz]
 		y_reg = y_train[nnz]
 
-		# 5) Fit the logistic regression.
+		# 5) Fit the linear regression.
 		self.reg.fit(x_reg, y_reg)
 
 
@@ -111,7 +112,7 @@ class PricingModel:
 		# YOUR CODE HERE
 
 		# In our example, we just apply the logistic classifier.
-		return self.clf.predict_proba(X_clean)
+		return self.clf.predict_proba(X_clean)[:,1]
 
 
 	def predict_claim_amount(self, X_clean):
